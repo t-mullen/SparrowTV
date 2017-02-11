@@ -9,7 +9,7 @@
 <h4 align="center">Massively Scaleable WebRTC Video Streaming</h4>
 <br>
 
-SparrowTV is a realtime video streaming platform that uses WebRTC and a tree model to scale.
+SparrowTV is a realtime video streaming platform that uses WebRTC and a tree model to scale.  
 <a href="https://sparrowtv.herokuapp.com/">LIVE DEMO</a>
 
 - No expensive video streaming server.
