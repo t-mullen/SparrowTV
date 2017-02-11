@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css"> </head>
+
+<body>
+    <div id="app" class="container">
+        <div class="sidebar">
+            <a href="/" class="option" target="_blank"><i class="fa fa-search" aria-hidden="true"></i></a>
+            <a href="/stream" class="option"><i class="fa fa-video-camera" aria-hidden="true"></i></a>
+        </div>
+        <div class="navbar">
+            <a href="/" target="_blank"><div class="logo"><img src="assets/img/sparrow.png"></div></a>
+        </div>
+        <div class="feature">
+            <div v-cloak class="feature-content">
+                <div class="video-wrapper">
+                    <video class="main" autoplay v-bind:data-off="video.main.off" v-bind:src="video.main.src"></video>
+                    <video class="small" autoplay v-bind:data-off="video.small.off" v-bind:src="video.small.src"></video>
+                </div>
+                <div class="video-info">
+                    <div class="channel-image" v-bind:style="{ backgroundImage: 'url(' + channel.image + ')' }"></div>
+                    <div class="text">
+                        <h3>{{channel.title}}</h3>
+                        <h4>Streaming 
+                            <span v-if="!user.isStreamer">{{video.title}}</span>
+                            <input type="text" v-on:change="updateStreamInfo" v-if="user.isStreamer" v-model="video.title">
+                            <input type="text" v-on:change="updateStreamInfo" v-if="user.isStreamer" v-model="channel.image">
+                        </h4>
+                    </div>
+                    <hr>
+                    <div class="counts"> <span class="watchCount">
+                            <i class="fa fa-users" aria-hidden="true"></i> <span>{{counts.watchers}}</span> </span>  </span>
+                    </div>
+                </div>
+                <div class="channel-info" v-if="!user.isStreamer">
+                    <h2>{{channel.title}}</h2>
+                    <h3>{{channel.summary}}</h3>
+                    <p>{{channel.desc}}</p>
+                </div>
+                <div class="channel-info edit" v-if="user.isStreamer">
+                    <input v-on:change="updateStreamInfo" class='h2' v-model="channel.title">
+                    <input v-on:change="updateStreamInfo" class='h3' v-model="channel.summary">
+                    <textarea v-on:blur="updateStreamInfo" v-model="channel.desc" class='p'></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="chat" v-bind:style="{ background: chat.flashStyle }">
+            <div class="topbar"> Chat </div>
+            <div class="list" v-cloak>
+                <div class="item" v-for="msg in chat.messages"> 
+                    <span class="time">{{msg.time}}</span> 
+                    <span class="username">{{msg.username}}</span>: 
+                    <span class="message">{{msg.text}}</span>
+                </div>
+            </div>
+            <div class="controls-wrapper">
+                <div class="controls">
+                    <textarea v-on:keyup.enter="sendChatMessage" v-model="chat.workingMessage" placeholder="Send a message"></textarea>
+                    <div class="buttons">
+                        <button v-on:click="raiseHand"><i class="fa fa-hand-paper-o" aria-hidden="true"></i></button>
+                        <button v-on:click="sendChatMessage" class="pull-right">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="js/vendor/simplepeer.min.js"></script>
+    <script src="js/vendor/getScreenId.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

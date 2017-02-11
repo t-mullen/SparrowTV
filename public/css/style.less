@@ -1,0 +1,376 @@
+@font-face {
+    font-family: Helvetica;
+    src: url(../../assets/font/HelvNeue.woff) format('woff');
+}
+
+@phones: ~"only screen and (min-width : 480px)";
+@tablets: ~"only screen and (min-width : 650px)";
+@desktops: ~"only screen and (min-width : 992px)";
+@monitors: ~"only screen and (min-width : 1200px)";
+html,
+body {
+    font-family: Helvetica;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    min-height: 100%;
+    overflow: auto;
+}
+
+:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+:-moz-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+:-ms-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+.navbar {
+    background: white;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 50px;
+    z-index: 2;
+    border-bottom: solid 3px #466BB0;
+    
+    .logo {
+        color: white;
+        height: 50px;
+        width: 50px;
+        background: #466BB0;
+        
+        img {
+            height: 70%;
+            width: 70%;
+            margin: 15%;
+        }
+    }
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 50px;
+    bottom: 0;
+    width: 50px;
+    background: black;
+    z-index: 1;
+    
+    .option {
+        margin-top: 20px;
+        color: white;
+        padding: 5px;
+        text-align: center;
+        font-size: 26px;
+        cursor: pointer;
+        display: block;
+    }
+}
+
+.feature {
+    position: absolute;
+    left: 60px;
+    top: 60px;
+    right: 10px;
+    bottom: 0;
+    overflow: auto;
+    
+    .feature-content {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        padding-bottom: 50px;
+
+        @media @tablets {
+            right: 290px;
+        }
+        .video-wrapper {
+            height: 350px;
+            width: 100%;
+            background: black;
+            margin-bottom: 10px;
+            @media @monitors {
+                height: 500px;
+            }
+            
+            video.main {
+                width: 100%;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                max-height: 100%;
+                pointer-events: none;
+                
+                &[data-off='true']{
+                    display: none;
+                }
+            }
+            video.small {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 130px;
+                z-index: 2;
+                pointer-events: none;
+                
+                @media @monitors {
+                    width: 200px;
+                }
+                
+                &[data-off='true']{
+                    display: none;
+                }
+            }
+            video.main[data-off='true'] + video.small {
+                position: static;
+                border: none;
+                width: 100% !important;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                max-height: 100%; 
+            }
+        }
+        .video-info {
+            .channel-image {
+                width: 50px;
+                height: 50px;
+                background: url('../assets/img/sparrowblue.png') 50% 50% no-repeat;
+                background-size: 100%;
+                display: inline-block;
+            }
+            .text {
+                display: inline-block;
+                line-height: 24px;
+                margin-left: 10px;
+                position: relative;
+                bottom: 5px;
+                h3 {
+                    font-size: 18px;
+                }
+                h4 {
+                    font-size: 15px;
+                    color: #706A7C;
+                    span {
+                        color: #466BB0;
+                    }
+                    input {
+                        border: 1px solid #706A7C;
+                        background: #efeef1;
+                        padding: 3px;
+                        margin-bottom: 5px;
+                    }
+                }
+            }
+            hr {
+                border: none;
+                height: 1px;
+                background-color: #efeef1;
+            }
+            .counts {
+                padding: 10px 5px;
+                
+                > span {
+                    margin-right: 12px;
+                    
+                    color: #706A7C;
+                    i {
+                        margin-right: 1px;
+                    }
+                }
+                > span.watchCount {
+                    color: #466BB0;
+                }
+            }
+        }
+        .channel-info {
+            padding: 30px 50px;
+            line-height: 30px;
+            h2, .h2 {
+                font-size: 30px;
+                display: block;
+            }
+            h3, .h3 {
+                font-size: 20px;
+                display: block;
+            }
+            p, .p {
+                line-height: 20px;
+                display: block;
+                font-size: 16px;
+            }
+            .h2,.h3,.p{
+                width: 100%;
+                margin-bottom: 3px;
+                border: 1px solid #706A7C;
+                background: #efeef1;
+                padding: 3px;
+            }
+            .p {
+                resize: none;
+                height: 200px;
+            }
+        }
+    }
+}
+
+.chat {
+    position: fixed;
+    background: #F9F9F9;
+    right: 0;
+    top: 53px;
+    bottom: 0;
+    width: 300px;
+    z-index: 1;
+    display: none;
+    transition: background .3s linear;
+    
+    
+    @media @tablets {
+        display: inherit;
+    }
+    .topbar {
+        height: 31px;
+        text-align: center;
+        font-size: 20px;
+        padding-top: 10px;
+        color: #706A7C;
+        margin-bottom: 10px;
+    }
+    .list {
+        position: absolute;
+        top: 50px;
+        bottom: 120px;
+        padding: 0 10px;
+        font-size: 16px;
+        
+        overflow: auto;
+        
+        .item {
+            margin-bottom: 10px;
+            margin-top: 2px;
+            line-height: 17px;
+            .time {
+                color: #706A7C;
+                font-size: 12px;
+            }
+            .username {
+                color: #466BB0;
+            }
+        }
+    }
+    .controls-wrapper {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        
+        .controls {
+            width: 100%;
+            
+            
+            textarea {
+                width: 100%;
+                background: white;
+                resize: none;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 16px;
+                font-family: Helvetica;
+            }
+            
+            .buttons {
+                button {
+                    min-width: 36px;
+                    height: 36px;
+                    color: white;
+                    background: #466BB0;
+                    padding: 10px;
+                    cursor: pointer;
+                    
+                    &:hover {
+                        background: #5480d3;
+                    }
+                    
+                    &:active {
+                        background: #2d5196;
+                    }
+                    
+                    i {
+                        font-size: 16px;
+                        padding: 0;
+                    }
+                }
+            }
+            
+            
+        }
+    }
+}
+
+.feature-content.browse {
+    right : 10px;
+    
+    h3 {
+        text-align: center;
+        margin-top: 100px;
+        color : #706A7C;
+        font-size: 40px;
+    }
+    
+    .item {
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+        line-height: 20px;
+        position: relative;
+        border-bottom: 1px solid gray;
+        padding: 10px;
+    }
+    
+    a {
+        text-decoration: none;
+        color : #706A7C;
+    }
+    
+    span {
+        color: #5480d3;
+    }
+    
+    .channel-image {
+        width: 60px;
+        height: 60px;
+        background: url('../assets/img/sparrowblue.png') 50% 50% no-repeat;
+        background-size: 100%;
+        display: inline-block;
+    }
+    
+    .info {
+        display: inline-block;
+        margin-left: 10px;
+        position: absolute;
+        top: 0;
+    }
+    
+}
+
+[v-cloak] { display:none; }

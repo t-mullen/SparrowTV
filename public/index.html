@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css"> </head>
+
+<body>
+    <div id="app" class="container">
+        <div class="sidebar">
+            <a href="/" class="option"><i class="fa fa-search" aria-hidden="true"></i></a>
+            <a href="/stream" class="option"><i class="fa fa-video-camera" aria-hidden="true"></i></a>
+        </div>
+        <div class="navbar">
+            <a href="/"><div class="logo"><img src="assets/img/sparrow.png"></div></a>
+        </div>
+        <div class="feature">
+            <div class="feature-content browse">
+            
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/vendor/microstache.min.js"></script>
+<script src="js/util.js"></script>
+<script>
+    var outputEl = document.querySelector('.feature-content'),
+        
+        template = `<a class="item" href="/watch?room={{id}}">
+                    <div class="channel-image" style="background-image : url({{channel.image}})"></div>
+                    <div class="info">
+                        <h4><span>{{channel.title}}</span> streaming <span>{{title}}</span></h4>
+                        <p>{{channel.summary}}</p>
+                        <p><i class="fa fa-users" aria-hidden="true"></i> {{watchers}}</p>
+                    </div>
+                </a>`;
+    
+    function check() {
+        window.makeAjaxCall('get', '/api/rooms', function(data){
+            var result = '',
+                rooms = JSON.parse(data),
+                noRooms = true;
+
+            for (var room in rooms){
+                noRooms=false;
+                rooms[room].id=room;
+                result+=Microstache.template(template, rooms[room]);
+            }
+
+            if (noRooms){
+                result = "<h3>No streams!</h3>"
+            }
+
+            outputEl.innerHTML=result;
+
+        }, function(err){
+            console.error(err);
+        });
+    }
+    
+    check();
+    window.setInterval(check, 5000);
+    
+</script>
+
+</html>
