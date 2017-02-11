@@ -11,4 +11,17 @@
 
 SparrowTV is a realtime video streaming platform that uses WebRTC and a binary tree model to scale.
 
-This eliminates the need for an expensive video streaming server or any software installation (for viewers with compatiable browsers).
+- No expensive video streaming server.
+- No software installation (*for viewers with compatiable browsers*).
+- MIT Licensed!
+
+This low-cost alternative to traditional streaming servers allows anyone to run their own live-streaming service.
+
+
+
+## TODO:
+- Content integrity checks (currently, viewers can manipulate the streams they output).
+- Better churn management.
+- Increase outdegree based on bandwidth.
+- Traditional fallback for non-WebRTC browsers.
+- Streamer/chat moderation features.
