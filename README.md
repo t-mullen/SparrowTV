@@ -6,7 +6,7 @@
   <br>
   <br>
 </h1>
-<h4 align="center">Massively Scaleable WebRTC Video Streaming</h4>
+<h4 align="center">Massively Scalable WebRTC Video Streaming</h4>
 <br>
 
 SparrowTV is a realtime video streaming platform that uses WebRTC and a tree model to scale.  
