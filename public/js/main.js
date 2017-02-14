@@ -66,6 +66,7 @@
                     channel : this.channel,
                     title : this.video.title
                 });
+                this.username = this.channel.title; // USername is channel
             },
             setVideoURL : function (url) {
                 if (!this.user.isStreamer) {

@@ -137,14 +137,19 @@ io.on('connection', function(socket) {
     
     socket.on('datamessage', function(data) {
         if (data.type === 'desc') {
-            if (socket.id === socket.room) {
+            if (socket.id === socket.room) { // If room matches id, is broadcaster
                 rooms[socket.room].title = data.title;
                 rooms[socket.room].channel = data.channel;
             } else{
                 return; // Prevent unauthorized description changes
             }
         }
-        data.username = socket.username;
+        if (socket.id === socket.room) {
+          data.username = rooms[socket.room].channel.title;
+        } else {
+          data.username = socket.username;
+        }
+        
         socket.to(socket.room).broadcast.emit('datamessage', data);
     });
     
