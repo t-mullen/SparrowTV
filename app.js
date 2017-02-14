@@ -13,7 +13,7 @@ var sockets = {},
 var defaultChannel = {
                         title : 'No channel name',
                         summary : 'No summary',
-                        desc : 'Chrome Screenshare: http://bit.ly/1v9Xh7O. Firefox Screenshare: https://mzl.la/1U8tvLI',
+                        desc : 'Chrome Screenshare: http://bit.ly/1v9Xh7O.\n\nFirefox Screenshare: https://mzl.la/1U8tvLI',
                         image : '../assets/img/sparrowblue.png'
                     };
 

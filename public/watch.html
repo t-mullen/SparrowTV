@@ -31,14 +31,17 @@
                         </h4>
                     </div>
                     <hr>
-                    <div class="counts"> <span class="watchCount">
-                            <i class="fa fa-users" aria-hidden="true"></i> <span>{{counts.watchers}}</span> </span>  </span>
+                    <!-- Watch counts are hidden -->
+                    <div class="counts" v-if="false"> 
+                      <span class="watchCount">
+                            <i class="fa fa-users" aria-hidden="true"></i> <span>{{counts.watchers}}</span> 
+                      </span>  </span>
                     </div>
                 </div>
                 <div class="channel-info" v-if="!user.isStreamer">
                     <h2>{{channel.title}}</h2>
                     <h3>{{channel.summary}}</h3>
-                    <p>{{channel.desc}}</p>
+                    <p style="white-space: pre;">{{channel.desc}}</p>
                 </div>
                 <div class="channel-info edit" v-if="user.isStreamer">
                     <input v-on:change="updateStreamInfo" class='h2' v-model="channel.title">
