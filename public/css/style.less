@@ -14,11 +14,15 @@ body {
 
 html {
     overflow: hidden;
+    padding: 0;
+    margin: 0;
 }
 
 body {
     min-height: 100%;
     overflow: auto;
+    padding: 0;
+    margin: 0;
 }
 
 :-webkit-full-screen {
@@ -372,6 +376,71 @@ body {
         top: 0;
     }
     
+}
+
+.landing {    
+    a {
+        text-decoration: none;
+    }
+    
+    .split {
+        background: black;
+        color: #5480d3;
+        transition: background .2s linear;
+        
+        width: 100%;
+        height: 50%;
+        
+        &:hover {
+            background: #5480d3;
+            color: white;
+        }
+        
+        @media @phones {
+            height: 100%;
+            width: 50%;
+            float: left;
+        }
+    }
+    .centered {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+        
+        h2 {
+            text-decoration: none;
+            font-size: 50px;
+            line-height: 50px;
+        }
+        
+        div {
+            font-size: 60px;
+        }
+    }
+    
+    .logo {
+        position: fixed;
+        top: 30%;
+        transform: translateY(-50%);
+        width: 100%;
+        text-align: center;
+        pointer-events: none;
+    
+        
+        img {
+            width: 140px;
+            position: relative;
+            left: 6px;
+        }
+        
+        h1 {
+            position: relative;
+            left: 6px;
+            color: white;
+            font-size: 30px;
+        }
+    }
 }
 
 [v-cloak] { display:none; }

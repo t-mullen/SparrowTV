@@ -20,11 +20,15 @@ var defaultChannel = {
 server.listen(appEnv.port);
 
 app.get('/', function(req, res) {
-    res.sendFile(__dirname+'/public/index.html');
+    res.sendFile(__dirname+'/public/land.html');
 });
 
 app.get('/api/rooms', function(req, res) {
     res.send(JSON.stringify(rooms));
+});
+
+app.get('/browse', function(req, res) {
+    res.sendFile(__dirname+'/public/index.html');
 });
 
 app.get('/watch', function(req, res) {
