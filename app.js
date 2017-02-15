@@ -144,6 +144,7 @@ io.on('connection', function(socket) {
             if (socket.id === socket.room) {
                 rooms[socket.room].title = data.title;
                 rooms[socket.room].channel = data.channel;
+                socket.username = data.channel.title;
             } else{
                 return; // Prevent unauthorized description changes
             }
