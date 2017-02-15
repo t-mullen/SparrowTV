@@ -66,6 +66,7 @@
                     channel : this.channel,
                     title : this.video.title
                 });
+                this.username = this.channel.title;
             },
             setVideoURL : function (url) {
                 if (!this.user.isStreamer) {
@@ -286,7 +287,6 @@
                 }else if (data.type === 'desc' && !isStreamer) {
                     app.channel = data.channel;
                     app.video.title = data.title;
-                    app.username = data.channel.title;
                 }else if (data.type === 'hand') {
                     app.chat.flashStyle = '#ff6565';
                     setTimeout(function(){
