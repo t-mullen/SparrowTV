@@ -24,7 +24,7 @@
       channel: {
         title: 'No channel name',
         summary: 'No summary',
-        desc: 'Chrome Screenshare: http://bit.ly/1v9Xh7O. Firefox Screenshare: https://mzl.la/1U8tvLI',
+        desc: 'Chrome Screenshare: http://bit.ly/1v9Xh7O.',
         image: '../assets/img/sparrowblue.png'
       },
       video: {
@@ -176,7 +176,7 @@
         app.video.title = 'something'
         app.channel.title = 'guest'
         app.channel.summary = 'Stream summary not set.'
-        app.channel.desc = 'Chrome Screenshare: http://bit.ly/1v9Xh7O. Firefox Screenshare: https://mzl.la/1U8tvLI'
+        app.channel.desc = 'Chrome Screenshare: http://bit.ly/1v9Xh7O.'
         sendDataMessage({
           type: 'desc',
           channel: app.channel,
