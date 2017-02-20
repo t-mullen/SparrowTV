@@ -11,6 +11,7 @@
 [![Build Status](https://travis-ci.org/RationalCoding/SparrowTV.svg?branch=master)](https://travis-ci.org/RationalCoding/SparrowTV)
 
 SparrowTV is a realtime video streaming platform that uses WebRTC and a tree model to scale.  
+Each peer sends the stream to two other peers, leading to exponential growth.  
 <a href="https://sparrowtv.herokuapp.com/">LIVE DEMO</a>
 
 - Video streaming servers can cost millions of dollars. This removes the need entirely.  
