@@ -34,8 +34,7 @@
       chat: {
         workingMessage: '',
         flashStyle: '',
-        messages: [
-        ]
+        messages: []
       },
       counts: {
         watchers: 1
