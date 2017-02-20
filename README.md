@@ -12,17 +12,16 @@
 SparrowTV is a realtime video streaming platform that uses WebRTC and a tree model to scale.  
 <a href="https://sparrowtv.herokuapp.com/">LIVE DEMO</a>
 
-- No expensive video streaming server.
+- Video streaming servers can cost millions of dollars. This removes the need entirely.  
 - No software installation (*for viewers with compatiable browsers*).
 - MIT Licensed!
 
 This low-cost alternative to traditional streaming servers allows anyone to run their own live-streaming service.
 
-
-
-## TODO:
-- Content integrity checks (currently, viewers can manipulate the streams they output).
+## TODO (PRs Welcome!):
+- Content integrity checks (currently, viewers could theoretically manipulate the streams they share).
 - Better churn management.
 - Increase outdegree based on bandwidth.
 - Traditional fallback for non-WebRTC browsers.
 - Streamer/chat moderation features.
+- Aesthetics (emoji, themes, etc)
