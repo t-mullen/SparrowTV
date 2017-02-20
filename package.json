@@ -10,7 +10,8 @@
   "keywords": [
     "streaming",
     "p2p",
-    "webrtc"
+    "webrtc",
+    "live"
   ],
   "author": "Thomas Mullen",
   "license": "MIT",
