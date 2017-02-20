@@ -8,6 +8,7 @@
 </h1>
 <h4 align="center">Scalable P2P Real-Time Streaming over WebRTC</h4>
 <br>
+[![Build Status](https://travis-ci.org/RationalCoding/SparrowTV.svg?branch=master)](https://travis-ci.org/RationalCoding/SparrowTV)
 
 SparrowTV is a realtime video streaming platform that uses WebRTC and a tree model to scale.  
 <a href="https://sparrowtv.herokuapp.com/">LIVE DEMO</a>
@@ -18,10 +19,12 @@ SparrowTV is a realtime video streaming platform that uses WebRTC and a tree mod
 
 This low-cost alternative to traditional streaming servers allows anyone to run their own live-streaming service.
 
-## TODO (PRs Welcome!):
+## TODO:
 - Content integrity checks (currently, viewers could theoretically manipulate the streams they share).
 - Better churn management.
 - Increase outdegree based on bandwidth.
 - Traditional fallback for non-WebRTC browsers.
 - Streamer/chat moderation features.
 - Aesthetics (emoji, themes, etc)
+
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
