@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://rationalcoding.github.io/SparrowTV"><img src="https://s28.postimg.org/aw130lq8t/sparrowblue.png" alt="SparrowTV" width="180"></a>
+  <a href="https://sparrowtv.herokuapp.net"><img src="https://s28.postimg.org/aw130lq8t/sparrowblue.png" alt="SparrowTV" width="180"></a>
   <br>
   SparrowTV
   <br>
