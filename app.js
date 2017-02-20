@@ -2,6 +2,7 @@ var express = require('express'),
     app = express(),
     server = require('http').Server(app),
     io = require('socket.io')(server),
+    signal = require('simple-signal-server')(io),
     cfenv = require('cfenv'),
     appEnv = cfenv.getAppEnv(),
     Moniker = require('moniker'),
@@ -50,7 +51,7 @@ io.on('connection', function(socket) {
     socket.emit('username', socket.username);
     
     // Peer disconnects
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function (metadata) {
         if (socket.room === socket.id) {
             io.to(socket.room).emit('datamessage', {
                 channel : defaultChannel,
@@ -96,49 +97,6 @@ io.on('connection', function(socket) {
         socket.emit('broadcast', socket.id);
     });
     
-    // Peer requests peers
-    socket.on('discover', function(data) {
-        if (!data || !data.room || !rooms[data.room]) return;
-
-        if (socket.room){
-            io.to(socket.room).emit('watchers', --rooms[socket.room].watchers);
-            socket.leave(socket.room);
-        }
-        socket.room = data.room;
-        socket.join(data.room);
-        io.to(socket.room).emit('watchers', ++rooms[socket.room].watchers);
-        
-        var targetPeers = rooms[data.room].model.addPeer(socket.id);
-        socket.emit('discover', targetPeers);
-    });
-    
-     // First peer provides initial offer
-    socket.on('signaloffer', function(data) {
-        if (!data || !data.id || !data.signal) return;
-        
-        if (sockets[data.id] && sockets[data.id].room === socket.room){
-            sockets[data.id].emit('signaloffer', {
-                id : socket.id,
-                streamID : data.streamID,
-                signal : data.signal
-            });
-        }
-    });
-    
-    // Peer responds to offer
-    socket.on('signalanswer', function(data) {
-        if (!data || !data.id || !data.signal) return;
-        
-        if (sockets[data.id] && sockets[data.id].room === socket.room){
-            sockets[data.id].emit('signalanswer', {
-                id : socket.id,
-                streamID : data.streamID,
-                signal : data.signal
-            });
-        }
-    });
-    
-    
     socket.on('datamessage', function(data) {
         if (data.type === 'desc') {
             if (socket.id === socket.room) {
@@ -152,7 +110,32 @@ io.on('connection', function(socket) {
         data.username = socket.username;
         socket.to(socket.room).broadcast.emit('datamessage', data);
     });
-    
 });
+
+// Peer requests peers
+signal.on('discover', function(id, data) {
+    if (!data || !data.room || !rooms[data.room]) return;
+
+    console.log('got discover')
+
+    if (sockets[id].room){
+        io.to(sockets[id].room).emit('watchers', --rooms[sockets[id].room].watchers);
+        sockets[id].leave(sockets[id].room);
+    }
+    sockets[id].room = data.room;
+    sockets[id].join(data.room);
+    io.to(sockets[id].room).emit('watchers', ++rooms[sockets[id].room].watchers);
+
+    var targetPeers = rooms[data.room].model.addPeer(sockets[id].id);
+    
+    console.log('sent discover')
+    
+    return targetPeers;
+});
+
+signal.on('request', function (request) {
+    console.log(request.metadata)
+    request.forward()
+})
 
 console.log('Server online at '+appEnv.url);
