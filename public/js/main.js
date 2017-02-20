@@ -209,7 +209,7 @@
       })
 
       socket.on('datamessage', function (data) {
-                // Chat msg
+        // Chat msg
         if (data.type === 'chat') {
           app.appendChatMessage(data)
         } else if (data.type === 'desc' && !isStreamer) {
@@ -223,7 +223,7 @@
         }
       })
 
-             // Update watch count
+      // Update watch count
       socket.on('watchers', function (numWatchers) {
         app.counts.watchers = numWatchers
       })

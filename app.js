@@ -15,7 +15,7 @@ var rooms = {}
 var defaultChannel = {
   title: 'No channel name',
   summary: 'No summary',
-  desc: 'Chrome Screenshare: http://bit.ly/1v9Xh7O.\n\nFirefox Screenshare: https://mzl.la/1U8tvLI',
+  desc: 'Chrome Screenshare: http://bit.ly/1v9Xh7O.',
   image: '../assets/img/sparrowblue.png'
 }
 
