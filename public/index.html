@@ -38,7 +38,7 @@
                 </a>`;
     
     function check() {
-        window.makeAjaxCall('get', '/api/rooms', function(data){
+        Util.makeAjaxCall('get', '/api/rooms', function(data){
             var result = '',
                 rooms = JSON.parse(data),
                 noRooms = true;

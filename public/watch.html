@@ -19,8 +19,8 @@
         <div class="feature">
             <div v-cloak class="feature-content">
                 <div class="video-wrapper">
-                    <video class="main" autoplay v-bind:data-off="video[0].off" v-bind:src="video[0].src"></video>
-                    <video class="small" autoplay v-bind:data-off="video[1].off" v-bind:src="video[1].src"></video>
+                    <video class="main" autoplay data-off="true"></video>
+                    <video class="small" autoplay data-off="true"></video>
                 </div>
                 <div class="video-info">
                     <div class="channel-image" v-bind:style="{ backgroundImage: 'url(' + channel.image + ')' }"></div>
@@ -74,8 +74,8 @@
     </div>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="js/vendor/simple-signal-client.min.js"></script>
-    <script src="js/vendor/getScreenId.js"></script>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="js/vendor/getScreenId.js"></script>
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
 </body>
