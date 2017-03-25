@@ -111,7 +111,9 @@ io.on('connection', function (socket) {
 })
 
 // Peer requests peers
-signal.on('discover', function (id, data) {
+signal.on('discover', function (request) {
+  var data = request.metadata
+  var id = request.initiator.id
   if (!data || !data.room || !rooms[data.room]) return
 
   if (sockets[id].room) {
@@ -124,7 +126,7 @@ signal.on('discover', function (id, data) {
 
   var targetPeers = rooms[data.room].model.addPeer(sockets[id].id)
 
-  return targetPeers
+  request.discover(targetPeers)
 })
 
 signal.on('request', function (request) {

@@ -122,8 +122,8 @@
 
       var options = {
         offerConstraints: {
-          offerToReceiveAudio: true,
-          offerToReceiveVideo: true
+          offerToReceiveAudio: false,
+          offerToReceiveVideo: false
         }
       }
 
@@ -131,24 +131,38 @@
         signal.on('ready', function (peerList) { // Get list of peers
           if (isStreamer) return // Streamer never discovers
           for (var i = 0; i < peerList.length; i++) {
-            signal.connect(peerList[i], options, 0)
-            signal.connect(peerList[i], options, 1)
+            signal.connect(peerList[i], options, {num: 0})
+            signal.connect(peerList[i], options, {num: 1})
           }
         })
       }
 
       signal.on('peer', function (peer) {
-        peer.on('stream', function (stream) {
-          streams[peer.metadata] = stream
-          videoElements[peer.metadata].src = window.URL.createObjectURL(stream)
-          videoElements[peer.metadata].setAttribute('data-off', '')
-
-          setTimeout(function () {
-            videoElements[peer.metadata].play()
+        var streamNum = peer.metadata.num
+        if (streams[streamNum]) {
+          streams[streamNum].pipe(peer)
+        } else {
+          streams[streamNum] = peer
+          var wrapper = new mediasource(videoElements[streamNum])
+          var writable = wrapper.createWriteStream('video/webm; codecs="vp8"')
+          
+          videoElements[streamNum].addEventListener('error', function () {
+            // listen for errors on the video/audio element directly 
+            var errorCode = videoElements[streamNum].error
+            var detailedError = wrapper.detailedError
+            // wrapper.detailedError will often have a more detailed error message 
+            console.error(detailedError)
           })
 
+          writable.on('error', function (err) {
+            // listening to the stream 'error' event is optional 
+            console.error(err)
+          })
+
+          streams[streamNum].pipe(writable)
+
           peers.push(peer)
-        })
+        }
 
         peer.on('connect', function () {
           if (isStreamer) {
@@ -162,8 +176,8 @@
       })
 
       signal.on('request', function (request) {
+        console.log(request.metadata)
         request.accept({
-          stream: streams[request.metadata],
           answerConstraints: {
             offerToReceiveAudio: false,
             offerToReceiveVideo: false
@@ -237,13 +251,19 @@
           if (!isStreamCaptured) { // Only capture once
             isStreamCaptured = true
             Util.captureUserMedia(function (newStreams) {
-              streams = newStreams
+              streams = new Array(newStreams.length)
 
               for (var i = 0; i < streams.length; i++) {
-                if (streams[i]) {
-                  videoElements[i].src = window.URL.createObjectURL(streams[i])
+                if (newStreams[i]) {
+                  streams[i] = new mediaRecorderStream(newStreams[i], {
+                    mimeType: 'video/webm; codecs=vp8',
+                    interval: 1000
+                  })
+                  videoElements[i].src = window.URL.createObjectURL(newStreams[i])
                   videoElements[i].play()
                   videoElements[i].setAttribute('data-off', '')
+                } else {
+                  streams[i] = null
                 }
               }
               socket.emit('broadcast') // Request to broadcast
