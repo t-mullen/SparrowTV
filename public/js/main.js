@@ -138,30 +138,20 @@
       }
 
       signal.on('peer', function (peer) {
+        peer.on('data', function (data) {
+          console.log(data)
+        })
         var streamNum = peer.metadata.num
         if (streams[streamNum]) {
           streams[streamNum].pipe(peer)
         } else {
           streams[streamNum] = peer
-          var wrapper = new mediasource(videoElements[streamNum])
-          var writable = wrapper.createWriteStream('video/webm; codecs="vp8"')
+          videoElements[streamNum].src = window.URL.createObjectURL(MediaSourceStream(peer).mediaSource)
+          peers.push(peer)
           
           videoElements[streamNum].addEventListener('error', function () {
-            // listen for errors on the video/audio element directly 
-            var errorCode = videoElements[streamNum].error
-            var detailedError = wrapper.detailedError
-            // wrapper.detailedError will often have a more detailed error message 
-            console.error(detailedError)
+            console.error(videoElements[streamNum].error)
           })
-
-          writable.on('error', function (err) {
-            // listening to the stream 'error' event is optional 
-            console.error(err)
-          })
-
-          streams[streamNum].pipe(writable)
-
-          peers.push(peer)
         }
 
         peer.on('connect', function () {
