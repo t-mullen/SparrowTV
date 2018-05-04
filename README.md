@@ -8,7 +8,6 @@
 </h1>
 <h4 align="center">Tree-based P2P Real-Time Streaming over WebRTC</h4>
 <br>
-[![Build Status](https://travis-ci.org/RationalCoding/SparrowTV.svg?branch=master)](https://travis-ci.org/RationalCoding/SparrowTV)
 
 SparrowTV is a realtime video streaming platform that uses WebRTC and a simple tree model.  
 Each peer sends the stream to two other peers, which in turn sends it to two others.
