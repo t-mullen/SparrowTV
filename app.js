@@ -52,19 +52,21 @@ io.on('connection', function (socket) {
     // Peer disconnects
   socket.on('disconnect', function (metadata) {
     if (socket.room === socket.id) {
-      io.to(socket.room).emit('datamessage', {
+      io.to(socket.room + 'data').emit('datamessage', {
         channel: defaultChannel,
         title: 'No title'
       })
       delete rooms[socket.room]
     } else if (socket.room && rooms[socket.room]) {
-      var reformPeers = rooms[socket.room].model.removePeer(socket.id)
-      for (var i = 0; i < reformPeers.length; i++) {
-        if (sockets[reformPeers[i]]) {
-          sockets[reformPeers[i]].emit('reform')
+      try {
+        var reformPeers = rooms[socket.room].model.removePeer(socket.id)
+        for (var i = 0; i < reformPeers.length; i++) {
+          if (sockets[reformPeers[i]]) {
+            sockets[reformPeers[i]].emit('reform')
+          }
         }
-      }
-      io.to(socket.room).emit('watchers', --rooms[socket.room].watchers)
+      } catch (err) {}
+      io.to(socket.room + 'data').emit('watchers', --rooms[socket.room].watchers)
     }
     delete sockets[socket.id]
   })
@@ -80,6 +82,7 @@ io.on('connection', function (socket) {
     }
     console.log('broadcast started', socket.id)
     socket.room = socket.id
+    socket.join(socket.room + 'data')
     rooms[socket.room] = {
       model: new Models.TreeModel(2),
       watchers: 1,
@@ -92,7 +95,7 @@ io.on('connection', function (socket) {
       }
     }
     rooms[socket.room].model.setBroadcaster(socket.id)
-    socket.to(socket.room).broadcast.emit('reform') // Demand the network reform
+    socket.broadcast.to(socket.room + 'data').emit('reform') // Demand the network reform
     socket.emit('broadcast', socket.id)
   })
 
@@ -107,7 +110,7 @@ io.on('connection', function (socket) {
       }
     }
     data.username = socket.username
-    socket.to(socket.room).broadcast.emit('datamessage', data)
+    socket.broadcast.to(socket.room + 'data').emit('datamessage', data)
   })
 })
 
@@ -115,16 +118,15 @@ io.on('connection', function (socket) {
 signal.on('discover', function (request) {
   const data = request.discoveryData
   const id = request.socket.id
-  console.log(id)
   if (!data || !data.room || !rooms[data.room]) return
 
   if (sockets[id].room) {
-    io.to(sockets[id].room).emit('watchers', --rooms[sockets[id].room].watchers)
+    io.to(sockets[id].room + 'data').emit('watchers', --rooms[sockets[id].room].watchers)
     sockets[id].leave(sockets[id].room)
   }
   sockets[id].room = data.room
-  sockets[id].join(data.room)
-  io.to(sockets[id].room).emit('watchers', ++rooms[sockets[id].room].watchers)
+  sockets[id].join(data.room + 'data')
+  io.to(sockets[id].room + 'data').emit('watchers', ++rooms[sockets[id].room].watchers)
 
   var targetPeers = rooms[data.room].model.addPeer(sockets[id].id)
 
@@ -132,7 +134,6 @@ signal.on('discover', function (request) {
 })
 
 signal.on('request', function (request) {
-  console.log('request', request.target)
   request.forward()
 })
 
