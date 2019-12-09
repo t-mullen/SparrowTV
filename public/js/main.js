@@ -76,13 +76,6 @@
         })
         app.username = app.channel.title
       },
-      setVideoURL: function (url) {
-        var app = this
-
-        if (!app.user.isStreamer) {
-          app.video.main.src = url
-        }
-      },
       appendChatMessage: function (data) {
         var app = this
 
@@ -236,18 +229,23 @@
         socket.on('connect', function () {
           if (!isStreamCaptured) { // Only capture once
             isStreamCaptured = true
-            Util.captureUserMedia(function (newStreams) {
-              streams = newStreams
+            function onClick() {
+              Util.captureUserMedia(function (newStreams) {
+                streams = newStreams
 
-              for (var i = 0; i < streams.length; i++) {
-                if (streams[i]) {
-                  videoElements[i].srcObject = streams[i]
-                  videoElements[i].play()
-                  videoElements[i].setAttribute('data-off', '')
+                for (var i = 0; i < streams.length; i++) {
+                  if (streams[i]) {
+                    videoElements[i].srcObject = streams[i]
+                    videoElements[i].play()
+                    videoElements[i].setAttribute('data-off', '')
+                  }
                 }
-              }
-              socket.emit('broadcast') // Request to broadcast
-            })
+                socket.emit('broadcast') // Request to broadcast
+              })
+              window.removeEventListener('click', onClick)
+            }
+            window.addEventListener('click', onClick)
+            alert('Click anywhere to start!')
           } else {
             socket.emit('broadcast') // Request to broadcast
           }
