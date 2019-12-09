@@ -78,6 +78,7 @@ io.on('connection', function (socket) {
     if (socket.room) {
       socket.leave(socket.room)
     }
+    console.log('broadcast started', socket.id)
     socket.room = socket.id
     rooms[socket.room] = {
       model: new Models.TreeModel(2),
@@ -111,7 +112,10 @@ io.on('connection', function (socket) {
 })
 
 // Peer requests peers
-signal.on('discover', function (id, data) {
+signal.on('discover', function (request) {
+  const data = request.discoveryData
+  const id = request.socket.id
+  console.log(id)
   if (!data || !data.room || !rooms[data.room]) return
 
   if (sockets[id].room) {
@@ -124,10 +128,11 @@ signal.on('discover', function (id, data) {
 
   var targetPeers = rooms[data.room].model.addPeer(sockets[id].id)
 
-  return targetPeers
+  request.discover(id, targetPeers)
 })
 
 signal.on('request', function (request) {
+  console.log('request', request.target)
   request.forward()
 })
 

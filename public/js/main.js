@@ -3,7 +3,7 @@
 
   var socket = new Io()
   var room = Util.getParameterByName('room')
-  var signal = new SimpleSignalClient(socket, {room: room})
+  var signal = new SimpleSignalClient(socket)
   var peers = []
 
   var sendDataMessage = function (data) {
@@ -113,55 +113,59 @@
         window.requestFullscreen(videoWrapper)
       })
 
-      var options = {
-        offerConstraints: {
-          offerToReceiveAudio: true,
-          offerToReceiveVideo: true
+      var options = {}
+
+      if (!isStreamer) {
+        signal.on('discover', async function (peerList) { // Get list of peers
+          if (isStreamer) return // Streamer never discovers
+          console.log(peerList)
+          for (var i = 0; i < peerList.length; i++) {
+            signal.connect(peerList[i], 0, { trickle: false}).then(peer => onPeer(peer))
+            signal.connect(peerList[i], 1, { trickle: false}).then(peer => onPeer(peer))
+          }
+        })
+        signal.discover({room: room})
+      }
+
+      function onPeer ({ peer, metadata }) {
+        console.log('got peer', peer, metadata)
+        if (!isStreamer) {
+          peer.on('stream', function (stream) {
+            console.log('got stream')
+            streams[metadata] = stream
+            videoElements[metadata].srcObject = stream
+            videoElements[metadata].play() 
+            videoElements[metadata].setAttribute('data-off', '')
+
+            setTimeout(function () {
+              videoElements[metadata].play()
+            })
+
+            peers.push(peer)
+          })
+        }
+
+        if (isStreamer) {
+          sendDataMessage({
+            type: 'desc',
+            channel: app.channel,
+            title: app.video.title
+          })
         }
       }
 
-      if (!isStreamer) {
-        signal.on('ready', function (peerList) { // Get list of peers
-          if (isStreamer) return // Streamer never discovers
-          for (var i = 0; i < peerList.length; i++) {
-            signal.connect(peerList[i], options, 0)
-            signal.connect(peerList[i], options, 1)
-          }
-        })
-      }
-
-      signal.on('peer', function (peer) {
-        peer.on('stream', function (stream) {
-          streams[peer.metadata] = stream
-          videoElements[peer.metadata].srcObject = stream
-          videoElements[peer.metadata].setAttribute('data-off', '')
-
-          setTimeout(function () {
-            videoElements[peer.metadata].play()
+      signal.on('request', async function (request) {
+        console.log('got request', request.metadata, streams[request.metadata])
+        if (streams[request.metadata]) {
+          const peer = await request.accept(request.metadata, {
+            trickle: false,
+            stream: streams[request.metadata]
           })
-
-          peers.push(peer)
-        })
-
-        peer.on('connect', function () {
-          if (isStreamer) {
-            sendDataMessage({
-              type: 'desc',
-              channel: app.channel,
-              title: app.video.title
-            })
-          }
-        })
-      })
-
-      signal.on('request', function (request) {
-        request.accept({
-          stream: streams[request.metadata],
-          answerConstraints: {
-            offerToReceiveAudio: false,
-            offerToReceiveVideo: false
-          }
-        }, request.metadata)
+          onPeer(peer)
+          console.log('accept')
+        } else {
+          request.reject()
+        }
       })
 
       socket.on('broadcast', function (roomID) {
@@ -180,6 +184,7 @@
           username: 'sparrowtv',
           message: 'Your room ID is ' + roomID
         })
+        signal.discover({ room })
       })
 
       socket.on('reform', function () { // On network restructure
@@ -193,7 +198,7 @@
           peers[0] = null
           peers.shift()
         }
-        signal.rediscover({room: room})
+        signal.discover({room: room})
       })
 
       socket.on('username', function (newUsername) {
