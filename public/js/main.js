@@ -140,7 +140,7 @@
       signal.on('peer', function (peer) {
         peer.on('stream', function (stream) {
           streams[peer.metadata] = stream
-          videoElements[peer.metadata].src = window.URL.createObjectURL(stream)
+          videoElements[peer.metadata].srcObject = stream
           videoElements[peer.metadata].setAttribute('data-off', '')
 
           setTimeout(function () {
@@ -241,7 +241,7 @@
 
               for (var i = 0; i < streams.length; i++) {
                 if (streams[i]) {
-                  videoElements[i].src = window.URL.createObjectURL(streams[i])
+                  videoElements[i].srcObject = streams[i]
                   videoElements[i].play()
                   videoElements[i].setAttribute('data-off', '')
                 }
